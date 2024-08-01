@@ -1,0 +1,21 @@
+self.add_webcam(self.webcam_label)
+    
+    def add_webcam(self, label):
+        if 'cap' not in self.__dict__:
+            self.cap=video_capture = cv2.VideoCapture(0)
+
+        self._label= label
+        self.process_webcam()
+
+    def process_webcam(self):
+        ret, frame = self.cap.read()
+        self.most_recent_capture_arr= frame
+
+        img = cv2.cvtColor(self.most_recent_capture_arr, cv2.COLOR_BGR2RGB)
+        self.most_recent_pil=Image.fromarray(img)
+
+        imgtK= ImageTk.PhotoImage(image=self.most_recent_pil)
+        self._label.imgTk= imgtK
+        self._label.configure(image=imgtK)
+
+        self._label.after(20, self.process_webcam)
